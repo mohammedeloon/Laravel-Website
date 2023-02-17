@@ -5,50 +5,41 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     public function destroy(Request $request)
     {
         Auth::guard('web')->logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
+        $notification = array(
+            'message'    => 'User Logged Out successfully',
+            'alert-type' => 'success'
+        );
+        return redirect('/login')->with($notification);
 
-        return redirect('/login');
     }//end method 
 
-    public function profile(){
+    public function profile()
+    {
         $id = Auth::user()->id;
         $adminData = User::find($id);
         return view('admin.admin_profile_view' , compact('adminData'));
-        // $user = auth()->user();
-        // $id = optional($user)->id;
-    
-        // if (!$id) {
-        //     // Handle the case where the user is not authenticated
-        //     return redirect()->route('login');
-        // }
-    
-        // $editData = User::find($id);
-    
-        // if (!$editData) {
-        //     // Handle the case where the user is authenticated but the user record is not found
-        //     return redirect()->back()->withErrors(['error' => 'User not found']);
-        // }
-    
-        // return view('admin.admin_profile_edit', compact('editData'));
-    
+       
     } //end method 
 
-    public function editProfile(){
+    public function editProfile()
+    {
         $id = Auth::user()->id;
         $editData = User::find($id);
         return view('admin.admin_profile_edit' , compact('editData'));
+
     } //end method
 
-    public function storeProfile(Request $request){
+    public function storeProfile(Request $request)
+    {
         $id   = Auth::user()->id;
         $data = User::find($id);
         $data->name     = $request->name;
@@ -62,11 +53,40 @@ class AdminController extends Controller
             $data['profile_image'] = $filename;
 
     } 
-    $data->save();
-    $notification = array(
-        'message' => 'Admin Profile Updated Successfully',
-        'alert-type' => 'success'
-    );
-    return redirect()->route('admin.profile')->with($notification);
-}
+        $data->save();
+        $notification = array(
+            'message' => 'Admin Profile Updated Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('admin.profile')->with($notification);
+
+    } //end method
+
+    public function changePassword()
+    {
+        return view('admin.admin_change_password');
+
+    } //end method 
+
+    public function updatePassword(Request $request)
+    {
+        $validateData = $request->validate([
+            'oldpassword' => 'required',
+            'newpassword' => 'required',
+            'confirm_password' => 'required|same:newpassword',
+
+        ]);
+        $hashedpassword = Auth::user()->password;
+        if(Hash::check($request->oldpassword , $hashedpassword)){
+           $users = User::find(Auth::id());
+           $users->password = bcrypt($request->newpassword);
+           $users->save();
+           session()->flash('message' ,'Password Updated Successfully');
+           return redirect()->back();
+        } else{
+            session()->flash('message' , 'Old Password is not matched.');
+            return redirect()->back();
+        }
+       
+    } //end method 
 }
