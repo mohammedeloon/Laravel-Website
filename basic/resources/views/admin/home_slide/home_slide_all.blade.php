@@ -11,9 +11,11 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Home Slide </h4>
-            <form action="{{ route('store.profile') }}" method="post" enctype="multipart/form-data">
+            <h4 class="card-title">Home Slide </h4><br><br>
+            <form action="{{ route('update.slider') }}" method="post" enctype="multipart/form-data">
                 @csrf
+
+                <input type="hidden" name="id" value="{{ $HomeSlide->id }}" >
             <div class="row mb-3">
                 <label for="example-text-input" class="col-sm-2 col-form-label">Title</label>
                 <div class="col-sm-10">
@@ -45,7 +47,7 @@
             <div class="row mb-3">
             <label for="example-text-input" class="col-sm-2 col-form-label"> </label>
                 <div class="col-sm-10">
-                <img id="showImage" class="rounded avatar-lg" src="{{ (!empty($HomeSlide->home_slide)) ? url('upload/home_slide/'.$HomeSlide->home_slide): url('upload/no_image.jpg') }}" alt="Card image cap">
+                <img id="showImage" class="rounded avatar-lg" src="{{ (!empty($HomeSlide->home_slide)) ? url($HomeSlide->home_slide): url('upload/no_image.jpg') }}" alt="Card image cap">
                 </div>
             </div>
             <!-- end row -->

@@ -11,7 +11,7 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Edit Profile </h4>
+            <h4 class="card-title">Edit Profile </h4><br><br>
             <form action="{{ route('store.profile') }}" method="post" enctype="multipart/form-data">
                 @csrf
             <div class="row mb-3">
