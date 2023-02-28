@@ -43,6 +43,9 @@ Route::controller(aboutController::class)->group(function(){
     Route::get('/about/page', 'aboutPage')->name('about.page');
     Route::post('/update/about' , 'updateAbout')->name('update.about');
     Route::get('/about' , 'homeAbout')->name('home.about');
+    Route::get('/about/multi/image' , 'aboutMultiImage')->name('about.multi.image');
+    Route::post('/store/multi/image' , 'storeMultiImage')->name('store.multi.image');
+    Route::get('/all/multi/image' , 'getAllMultiImages')->name('all.multi.image');
 });
 
 //All homeSlide routes

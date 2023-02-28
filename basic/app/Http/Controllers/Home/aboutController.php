@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use App\Models\About;
+use App\Models\MultiImage;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Image;
 
@@ -59,5 +61,39 @@ class aboutController extends Controller
       $aboutPage = About::find(1);
       return view('frontend.about_page', compact('aboutPage'));
    } // end method
+
+   public function aboutMultiImage()
+   {
+      return view('admin.about_page.about_multi_image');
+   }  // end method
+
+   public function storeMultiImage(Request $request)
+   {
+      $multiImage =  $request->file('multi_image');
+      foreach($multiImage as $image){
+         $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+         Image::make($image)->resize(220 , 220)->save('upload/multi/' . $name_gen);
+         $save_url = 'upload/multi/' . $name_gen;
+
+         MultiImage::insert([
+               'multi_image' => $save_url,
+               'created_at'  => Carbon::now(),
+         ]);
+      } // end foreach
+
+         $notification  = array(
+            'message'    => 'Multiple Images Inserted  Successfully' , 
+            'alert-type' => 'success',
+         );
+         return redirect()->back()->with($notification);
+   } //end method
+
+   public function  getAllMultiImages()
+   {
+     $allMultiImage = MultiImage::all();
+  
+
+      return view('admin.about_page.all_multi_image' , compact('allMultiImage'));
+   } ///end method
 
 }
