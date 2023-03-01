@@ -94,6 +94,47 @@ class aboutController extends Controller
   
 
       return view('admin.about_page.all_multi_image' , compact('allMultiImage'));
-   } ///end method
+   } //end method
+
+   public function editMultiImage($id)
+   {
+      $MultiImage = MultiImage::findOrFail($id);
+      return view('admin.about_page.edit_multi_image' , compact('MultiImage'));
+   } // end method 
+
+   public function updateMulttiImage(Request $request)
+   {
+      $imageId = $request->id;
+      if($request->file('multi_image')){
+         $image  = $request->file('multi_image');
+         $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+         Image::make($image)->resize(523 , 605)->save('upload/multi/' . $name_gen);
+         $save_url = 'upload/multi/' . $name_gen;
+         MultiImage::findOrFail($imageId)->update([
+            'multi_image' => $save_url ,
+         ]);
+         $notification = array(
+            'message'    => 'Multi Image Updated Successfully' , 
+            'alert-type' => 'success'
+         );
+         return redirect()->route('all.multi.image')->with($notification);
+      } // ennd if
+   } // end method
+
+   public function deleteMultiImage($id)
+   {
+      //delete from files
+      $multi = MultiImage::findOrFail($id);
+      $image = $multi->multi_image;
+      unlink($image);
+      //delete from database
+      MultiImage::findOrFail($id)->delete();
+      $notification = array(
+         'message'    => 'Multi Image Deleted Successfully' , 
+         'alert-type' => 'success'
+      );
+      return redirect()->back()->with($notification);
+
+   } // end method
 
 }

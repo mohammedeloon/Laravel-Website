@@ -36,11 +36,11 @@
                             @foreach($allMultiImage as $image):
                             <tr>
                                 <td>{{ $i++ }}</td>
-                                <td><img src="{{asset($image->multi_image)}}" alt="" width="60px"  height="50px"></td>
+                                <td><img src="{{ asset($image->multi_image) }}" alt="" width="60px"  height="50px"></td>
                                 <td>{{ $image->created_at}}</td>
                                 <td>
-                                    <a href="" class="btn btn-info sm" title="Edit Data"><i class="fas fa-edit"></i></a>
-                                    <a href="" class="btn btn-danger sm" title="Delete Data"><i class="fas fa-trash-alt"></i></a>
+                                    <a href=" {{route('edit.multi.image' , $image->id)}} " class="btn btn-info sm" title="Edit Data"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ route('delete.multi.image' , $image->id) }}" id="delete" class="btn btn-danger sm" title="Delete Data"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                             @endforeach
