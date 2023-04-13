@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Demo\Democontrollar;
 use App\Http\Controllers\Home\aboutController;
+use App\Http\Controllers\Home\BlogCategoryController;
 use App\Http\Controllers\Home\HomeSliderController;
 use App\http\Controllers\Home\PortfolioController;
 use App\Models\About;
@@ -70,13 +71,23 @@ Route::controller(PortfolioController::class)->group(function(){
 
 });
 
+//ALl blog  routes
+Route::controller(BlogCategoryController::class)->group(function(){
+    Route::get('add/blog/category' , 'addCategory')->name('add.category');
+    Route::get('all/blog/category', 'allCategory')->name('all.blog.category');
+    Route::post('store/blog/category' , 'storeCategory')->name('store.blog.category');
+    Route::get('edit/blog/category/{id}', 'editCategory')->name('edit.blog.category');
+    Route::post('update.blog.category', 'updatecategory')->name('update.blog.category');
+    Route::get('delete/blog/ategory/{id}', 'deleteCategory')->name('delete.blog.category');
+
+});
+
 //All authentication routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 
 
 require __DIR__.'/auth.php';
