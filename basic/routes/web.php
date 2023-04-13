@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Demo\Democontrollar;
 use App\Http\Controllers\Home\aboutController;
 use App\Http\Controllers\Home\HomeSliderController;
+use App\http\Controllers\Home\PortfolioController;
 use App\Models\About;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,18 @@ Route::controller(aboutController::class)->group(function(){
 Route::controller(HomeSliderController::class)->group(function(){
     Route::get('/home/slide' , 'HomeSlider')->name('home.slide');
     Route::post('/update/slider' , 'updateSlider')->name('update.slider');
+});
+
+//All porttfolio controllers
+Route::controller(PortfolioController::class)->group(function(){
+    Route::get('all/portfolio' , 'allPortfolio')->name('all.portfolio');
+    Route::get('add/portfolio' , 'addPortfolio')->name('add.portfolio');
+    Route::post('store/portfolio' , 'storePortfolio')->name('store.portfolio');
+    Route::get('edit/portfolio/{id}' , 'editPortfolio')->name('edit.portfolio');
+    Route::get('delete/portfolio/{id}', 'deletePortfolio')->name('delete.portfolio');
+    Route::post('update/portfolio' , 'updatePortfolio')->name('update.portfolio');
+    Route::get('portfolio/details/{id}' , 'portfolioDetails' )->name('portfolio.details');
+
 });
 
 //All authentication routes
